@@ -1,0 +1,100 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: black;
+}
+
+p {
+    font-size: 180px;
+}
+
+a {
+    color: #2DC5FC;
+    text-decoration: none;
+}
+
+.play {
+    font-family: Saira Condensed;
+    font-size: 100px;
+    color: white;
+    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.img1 .img2 {
+    width: 100%;
+}
+
+.img2 {
+    display: flex;
+    justify-content: end;
+}
+
+.ironhack {
+    height: 150px;
+    margin-top: 80px;
+    margin-left: 100px;
+}
+
+.prohibido {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 80px;
+    margin-right: 100px;
+}
+
+
+
+#myCanvas {
+    background-color: rgb(59, 59, 59) ;
+    margin: 75px 0 0 150px;
+    border-radius: 20px;
+    border: 1px solid white;
+}
+
+
+.right {
+    font-family: Saira Condensed;
+    text-transform: uppercase;
+    color: white;
+    position: absolute;
+    top: 30%;
+    left: 60%;
+    display: none;
+} 
+
+.left {
+    font-family: Saira Condensed;
+    text-transform: uppercase;
+    color: white;
+    position: absolute;
+    top: 30%;
+    left: 20%;
+    display: none;
+}
+
+.win {
+    font-size: 120px;
+}
+
+.play-again {
+    color: white;
+    font-size: 30px;
+    border: 2px solid white;
+    width: 200px;
+    border-radius: 10px;
+    position: relative;
+    left: 35%;
+
+}
+
+.play-again:hover {
+    background-color: white;
+    color: black;
+}

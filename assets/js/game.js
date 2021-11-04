@@ -31,6 +31,10 @@ const game = {
   obstableHeigt: 100,
   ballWidth: 40,
   ballHeight: 40,
+  intervalId: 0,
+  countdown: 3,
+
+
   init() {
     this.setContext()
     this.setListeners()
@@ -42,16 +46,49 @@ const game = {
     this.ctx = this.canvasDOM.getContext("2d")
   },
   start() {
-    setInterval(() => {
+    this.intervalId = setInterval(() => {        
+      
       this.clearScreen()
-      if (this.framesCounter !== 0 && this.framesCounter % (this.FPS * 3) === 0) {
-        this.createObstacle();
+
+      if (this.framesCounter !== 0 && this.framesCounter % this.FPS === 0) {
+        this.countdown--;
       }
-      this.moveAll()
-      this.drawAll()
-      this.detectCollision()
+
+      this.drawCountdown()
+
+      if(this.countdown <= 0) {        
+        clearInterval(this.intervalId);
+
+        this.intervalId = setInterval(() => {
+          if(this.scorePlayerRight === 3) {
+            this.gameOver(0)
+          }
+          if(this.scorePlayerLeft === 3) {
+            this.gameOver(1)
+          }
+          
+          this.clearScreen()
+          if (this.framesCounter !== 0 && this.framesCounter % (this.FPS * 10) === 0) {
+            this.createObstacle();
+          }
+          this.moveAll()
+          this.detectCollision()
+          this.drawAll()
+
+          
+          this.framesCounter++
+        }, 1000 / this.FPS)
+      }
+
       this.framesCounter++
     }, 1000 / this.FPS)
+
+    
+    
+  },
+  drawCountdown() {
+    this.ctx.font = "100px Saira Condensed";
+    this.ctx.fillText(this.countdown, this.width / 2, this.height / 2, 50);
   },
   drawAll() {
     this.drawTheLines()
@@ -63,7 +100,7 @@ const game = {
   },
   drawTheLines() {
     this.ctx.lineWidth = 7
-    this.ctx.strokeStyle = 'gray'
+    this.ctx.strokeStyle = 'white'
     this.ctx.beginPath()
     this.ctx.setLineDash([10, 10])
     this.ctx.moveTo(750, 0)
@@ -121,7 +158,7 @@ const game = {
     // this.createObstacle()
   },
   createBall() {
-    this.ball = new Ball(this.ctx, this.width / 2, this.height, this.ballWidth, this.ballHeight, 7)
+    this.ball = new Ball(this.ctx, this.width / 2, this.height, this.ballWidth, this.ballHeight, 11)
   },
   createScore() {
     this.score = new Score(this.ctx, 40, 40)
@@ -144,6 +181,7 @@ const game = {
       this.createBall()
       this.ball.turnSideways()
       this.scorePlayerRight++
+
       this.collidedRight = false;
       this.collidedLeft = false;
     }
@@ -156,6 +194,7 @@ const game = {
       this.collidedRight = true;
       this.collidedLeft = false;
     }
+
     if (this.ball.posX + this.ball.width > this.leftPosX &&
       this.ball.posY < this.leftPos + this.lineHeight &&
       this.ball.posY + this.ball.height > this.leftPos &&
@@ -165,7 +204,7 @@ const game = {
       this.collidedRight = false;
       this.collidedLeft = true;
     }
-    
+    // Falta la detección de la colisión con el obstaculo. Esto no funciona rompe la colisión anterior.
     if (this.obstacle) {
       if (this.ball.posX < this.obstacle.posX + this.obstacle.width &&
         this.ball.posX + this.ball.width > this.obstacle.posX &&
@@ -176,15 +215,18 @@ const game = {
            this.collidedObsRight = true
            this.collidedObsLeft = false
           }
+
          if(this.collidedObsRight && this.ball.posX + this.ball.width > this.obstacle.posX + this.ball.width){
            this.ball.turnSideways()
            this.collidedObsRight = false
            this.collidedObsLeft = true
           }
+
           if(!this.collidedObstacle && this.ball.posY < this.obstacle.posY){
             this.ball.turnUpwards()
             this.collidedObstacle = true
           }
+          
           if(!this.collidedObstacle && this.ball.posY + this.ball.height > this.obstacle.posY + this.ball.height){
             this.ball.turnUpwards()
             this.collidedObstacle = true
@@ -195,4 +237,20 @@ const game = {
   clearScreen() {
     this.ctx.clearRect(0, 0, this.width, this.height)
   },
+
+  gameOver(winner) {
+    clearInterval(this.intervalId)
+
+    console.log(winner)
+    
+    if(winner === 1) {
+      let winLeft = document.querySelector('.right')
+      winLeft.style.display = 'block';
+    } else if(winner === 0) {
+      let winRight = document.querySelector('.left')
+      winRight.style.display = 'block'; 
+    }
+  }
+
+
 }
