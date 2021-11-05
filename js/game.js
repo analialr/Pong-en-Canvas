@@ -192,7 +192,7 @@ const game = {
   },
 
   createBall() {
-    this.ball = new Ball(this.ctx, this.width / 2, this.height, this.ballWidth, this.ballHeight, 11)
+    this.ball = new Ball(this.ctx, this.width / 2, this.height, this.ballWidth, this.ballHeight, 13)
   },
 
   createScore() {
