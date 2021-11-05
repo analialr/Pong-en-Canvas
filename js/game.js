@@ -75,13 +75,13 @@ const game = {
           }
           
           this.clearScreen()
-          if (this.framesCounter !== 0 && this.framesCounter % (this.FPS * 1) === 0) {
+          if (this.framesCounter !== 0 && this.framesCounter % (this.FPS * 2) === 0) {
             this.createObstacle();
           }
           this.moveAll()
           this.detectCollision()
           this.drawAll()
-          
+
 
           
           this.framesCounter++
