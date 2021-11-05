@@ -89,9 +89,9 @@ a {
     border: 2px solid white;
     width: 200px;
     border-radius: 10px;
-    position: relative;
-    left: 35%;
-
+    display: block;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .play-again:hover {

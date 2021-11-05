@@ -35,16 +35,23 @@ const game = {
   countdown: 3,
 
 
+
   init() {
     this.setContext()
     this.setListeners()
     this.createAll()
     this.start()
   },
+
+
+
   setContext() {
     this.canvasDOM = document.querySelector('#myCanvas')
     this.ctx = this.canvasDOM.getContext("2d")
   },
+
+
+
   start() {
     this.intervalId = setInterval(() => {        
       
@@ -60,15 +67,15 @@ const game = {
         clearInterval(this.intervalId);
 
         this.intervalId = setInterval(() => {
-          if(this.scorePlayerRight === 3) {
+          if(this.scorePlayerRight === 10) {
             this.gameOver(0)
           }
-          if(this.scorePlayerLeft === 3) {
+          if(this.scorePlayerLeft === 10) {
             this.gameOver(1)
           }
           
           this.clearScreen()
-          if (this.framesCounter !== 0 && this.framesCounter % (this.FPS * 10) === 0) {
+          if (this.framesCounter !== 0 && this.framesCounter % (this.FPS * 1) === 0) {
             this.createObstacle();
           }
           this.moveAll()
@@ -82,10 +89,10 @@ const game = {
 
       this.framesCounter++
     }, 1000 / this.FPS)
-
-    
-    
   },
+
+
+
   drawCountdown() {
     this.ctx.font = "100px Saira Condensed";
     this.ctx.fillText(this.countdown, this.width / 2, this.height / 2, 50);
@@ -107,62 +114,90 @@ const game = {
     this.ctx.lineTo(750, 800)
     this.ctx.stroke()
   },
+
   drawTheLineLeft() {
     this.ctx.fillStyle = 'white'
     this.ctx.fillRect(this.leftPosX, this.leftPos, this.lineWidth, this.lineHeight)
   },
+
   drawTheLineRigh() {
     this.ctx.fillStyle = 'white'
     this.ctx.fillRect(this.rightPosX, this.rightPos, this.lineWidth, this.lineHeight)
   },
+
   drawScore() {
     this.score.draw(this.scorePlayerRight, this.scorePlayerLeft)
   },
+
   drawObstacle() {
     this.obstacle && this.obstacle.draw()
   },
+
+
+
   setListeners() {
-    document.onkeydown = e => {
-      e.key === 'ArrowUp' ? this.moveRightUp() : null
-      e.key === 'ArrowDown' ? this.moveRightDown() : null
-      e.key === 'w' ? this.moveLeftUp() : null
-      e.key === 's' ? this.moveLeftDown() : null
+      document.onkeydown = e => {
+      e.key === 'ArrowUp' ? this.arrowUpPressed = true : null
+      e.key === 'ArrowDown' ? this.arrowUDownPressed = true : null
+      e.key === 'w' ? this.wKeyPressed = true : null
+      e.key === 's' ? this.sKeyPressed = true : null
+    }
+    document.onkeyup = e => {
+      e.key === 'ArrowUp' ? this.arrowUpPressed = false : null
+      e.key === 'ArrowDown' ? this.arrowUDownPressed = false : null
+      e.key === 'w' ? this.wKeyPressed = false : null
+      e.key === 's' ? this.sKeyPressed = false : null
     }
   },
+
+
   moveAll() {
+
+    this.arrowUpPressed ? this.moveRightUp() : null
+    this.arrowUDownPressed ? this.moveRightDown() : null
+    this.wKeyPressed ? this.moveLeftUp() : null
+    this.sKeyPressed ? this.moveLeftDown() : null
+
     this.ball.moveUpwards()
     if (this.ball.posY < 0 || this.ball.posY > this.height) {
       this.collidedObstacle = false;
     }
     this.ball.movesIdeways()
   },
+
   moveLeftUp() {
-    let newPos = this.leftPos - 100;
+    let newPos = this.leftPos - 20;
     this.leftPos = (newPos < 0) ? 0 : newPos;
   },
+
   moveLeftDown() {
-    let newPos = this.leftPos + 100;
-    this.leftPos = (newPos + this.lineHeight > this.height) ? this.height - this.lineHeight : newPos;
+    let newPos = this.leftPos + 20;
+    this.leftPos = (newPos + this.lineHeight > this.height) ? this.height - this.lineHeight: newPos;
   },
+
   moveRightUp() {
-    let newPos = this.rightPos - 100;
+    let newPos = this.rightPos - 20;
     this.rightPos = (newPos < 0) ? 0 : newPos;
   },
+
   moveRightDown() {
-    let newPos = this.rightPos + 100
+    let newPos = this.rightPos + 20;
     this.rightPos = (newPos + this.lineHeight > this.height) ? this.height - this.lineHeight : newPos;
   },
+
   createAll() {
     this.createBall()
     this.createScore()
-    // this.createObstacle()
   },
+
   createBall() {
     this.ball = new Ball(this.ctx, this.width / 2, this.height, this.ballWidth, this.ballHeight, 11)
   },
+
   createScore() {
     this.score = new Score(this.ctx, 40, 40)
   },
+
   createObstacle() {
     let obstacleWidth = 100
     let obstacleHeight = 100
@@ -171,6 +206,7 @@ const game = {
     this.collidedObstacle = false;
     this.obstacle = new Obstacle(this.ctx, obstacleX, obstacleY, obstacleWidth, obstacleHeight)
   },
+
   detectCollision() {
     if (this.ball.goalRight) {
       this.createBall()
@@ -204,7 +240,7 @@ const game = {
       this.collidedRight = false;
       this.collidedLeft = true;
     }
-    // Falta la detección de la colisión con el obstaculo. Esto no funciona rompe la colisión anterior.
+  
     if (this.obstacle) {
       if (this.ball.posX < this.obstacle.posX + this.obstacle.width &&
         this.ball.posX + this.ball.width > this.obstacle.posX &&
@@ -234,6 +270,9 @@ const game = {
       }
     }
   },
+
+
+
   clearScreen() {
     this.ctx.clearRect(0, 0, this.width, this.height)
   },
