@@ -81,6 +81,7 @@ const game = {
           this.moveAll()
           this.detectCollision()
           this.drawAll()
+          
 
           
           this.framesCounter++
